@@ -224,7 +224,7 @@ export default function MarketingSite() {
     // Test 3: buttons wired to contact
     const buttons = Array.from(document.querySelectorAll("button"));
     console.assert(buttons.length > 0, "No buttons rendered");
-  }, []);
+  }, [DEV]);
 
   return (
     <div className="min-h-screen text-gray-900">
@@ -467,7 +467,11 @@ function ContactForm() {
     }
 
     // Serialize
-    const data = Object.fromEntries(new FormData(form) as any) as Record<string, string>;
+    const formData = new FormData(form);
+    const data: Record<string, string> = {};
+    formData.forEach((value, key) => {
+      data[key] = typeof value === "string" ? value : "";
+    });
     const payload = {
       source: "ecom-central-site",
       timestamp: new Date().toISOString(),
@@ -494,10 +498,10 @@ function ContactForm() {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       setOk("Thanks! We'll be in touch.");
       form.reset();
-    } catch (e: any) {
+    } catch (e: unknown) {
       // Even if CORS blocks reading the response, the request still lands in Sheets.
       // We show a soft success with a fallback note.
-      const msg = e?.message || "Network error";
+      const msg = e instanceof Error ? e.message : "Network error";
       setErr(`Submission issue: ${msg}. If this keeps happening, please email us.`);
     } finally {
       setSubmitting(false);
