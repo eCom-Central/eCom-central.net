@@ -17,10 +17,11 @@ import {
 
 /**
  * eCom Central – Marketing Site (single‑file React)
- * - Top nav removed (per request). Only brand + Get Started CTA remain.
- * - Pricing removed. All CTAs scroll to Contact section.
- * - FAQ uses native <details> for expandable items.
- * - Includes optional DEV sanity checks you can enable.
+ * - Top nav removed. Only brand + Get Started CTA.
+ * - Pricing removed. All CTAs scroll to Contact.
+ * - FAQ uses native <details> expand/collapse.
+ * - Contact form posts to Google Apps Script Web App.
+ * - Uses <img> (not next/image) to avoid sandbox/runtime issues.
  */
 
 // ===== Config =====
@@ -142,8 +143,9 @@ const Logo: React.FC<{ size?: number } & React.ImgHTMLAttributes<HTMLImageElemen
     <img
       src={LOGO_SRC}
       alt="eCom Central"
+      width={size}
+      height={size}
       className={`rounded-xl object-contain ${className}`}
-      style={{ width: size, height: size }}
       onError={() => setOk(false)}
       {...props}
     />
@@ -202,7 +204,7 @@ export default function MarketingSite() {
     show: (i: number) => ({
       opacity: 1,
       y: 0,
-      transition: { duration: 0.6, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] },
+      transition: { duration: 0.6, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
     }),
   } as const;
 
@@ -224,6 +226,14 @@ export default function MarketingSite() {
     // Test 3: buttons wired to contact
     const buttons = Array.from(document.querySelectorAll("button"));
     console.assert(buttons.length > 0, "No buttons rendered");
+    // Test 4: endpoint can be resolved (optional)
+    console.assert(typeof SHEETS_ENDPOINT === "string", "Sheets endpoint not a string");
+    // Test 5: hero image present
+    console.assert(!!document.querySelector('img[alt="Product Catalog & Reports"]'), "Hero image missing");
+    // Test 6: contact form controls exist
+    ["name", "email", "company", "monthly_orders", "message"].forEach((n) => {
+      console.assert(!!document.querySelector(`[name="${n}"]`), `Form control ${n} missing`);
+    });
   }, [DEV]);
 
   return (
@@ -280,7 +290,7 @@ export default function MarketingSite() {
             </ul>
           </motion.div>
 
-          <motion.div initial={{ opacity: 0, scale: 0.98, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}>
+          <motion.div initial={{ opacity: 0, scale: 0.98, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] as [number, number, number, number], delay: 0.1 }}>
             <Card className="rounded-2xl shadow-xl ring-1 ring-black/5">
               <CardHeader>
                 <CardTitle>Product Catalog & Reports</CardTitle>
