@@ -2,16 +2,24 @@
 
 import { motion } from "framer-motion";
 import { Check, Zap } from "lucide-react";
+import Image from "next/image";
+import * as React from "react";
 
-// Improved minimal Button and Card components
-function Button({ children, className = "", variant = "default", size = "md", ...props }: any) {
+// Button
+type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+  variant?: "default" | "outline" | "ghost";
+  size?: "sm" | "md" | "lg";
+  className?: string;
+};
+
+function Button({ children, className = "", variant = "default", size = "md", ...props }: ButtonProps) {
   const base = "inline-flex items-center justify-center font-medium focus:outline-none transition";
-  const sizes: Record<string, string> = {
+  const sizes: Record<NonNullable<ButtonProps["size"]>, string> = {
     sm: "px-3 py-1.5 text-sm rounded-md",
     md: "px-4 py-2 text-sm rounded-lg",
     lg: "px-6 py-3 text-base rounded-xl",
   };
-  const variants: Record<string, string> = {
+  const variants: Record<NonNullable<ButtonProps["variant"]>, string> = {
     default: "bg-gray-600 text-white hover:bg-gray-700",
     outline: "border border-gray-300 bg-white hover:bg-gray-50",
     ghost: "text-gray-700 hover:bg-gray-100",
@@ -23,18 +31,24 @@ function Button({ children, className = "", variant = "default", size = "md", ..
   );
 }
 
-function Card({ children, className = "" }: any) {
-  return <div className={`rounded-2xl shadow-md border border-gray-200 bg-white ${className}`}>{children}</div>;
+// Card
+function Card(props: React.HTMLAttributes<HTMLDivElement>) {
+  const { className = "", ...rest } = props;
+  return <div className={`rounded-2xl shadow-md border border-gray-200 bg-white ${className}`} {...rest} />;
 }
-function CardHeader({ children, className = "" }: any) {
-  return <div className={`px-5 py-4 border-b border-gray-100 ${className}`}>{children}</div>;
+function CardHeader(props: React.HTMLAttributes<HTMLDivElement>) {
+  const { className = "", ...rest } = props;
+  return <div className={`px-5 py-4 border-b border-gray-100 ${className}`} {...rest} />;
 }
-function CardTitle({ children, className = "" }: any) {
-  return <h3 className={`text-lg font-semibold tracking-tight ${className}`}>{children}</h3>;
+function CardTitle(props: React.HTMLAttributes<HTMLHeadingElement>) {
+  const { className = "", ...rest } = props;
+  return <h3 className={`text-lg font-semibold tracking-tight ${className}`} {...rest} />;
 }
-function CardContent({ children, className = "" }: any) {
-  return <div className={`px-5 py-4 ${className}`}>{children}</div>;
+function CardContent(props: React.HTMLAttributes<HTMLDivElement>) {
+  const { className = "", ...rest } = props;
+  return <div className={`px-5 py-4 ${className}`} {...rest} />;
 }
+
 
 export default function MarketingSite() {
   return (
@@ -100,12 +114,19 @@ export default function MarketingSite() {
               <CardHeader>
                 <CardTitle>Product Catalog & Reports</CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="aspect-[16/10] w-full overflow-hidden rounded-xl border border-gray-200">
-                  <img src={"/screenshots/product-catalog.png"} alt="Product Catalog & Reports" className="h-full w-full object-cover" />
-                </div>
-                <p className="mt-4 text-sm text-gray-600">Polished UI for purchasing, products, shipments, P&L, and sales analytics.</p>
-              </CardContent>
+             <CardContent>
+  <div className="aspect-[16/10] w-full overflow-hidden rounded-xl border border-gray-200 relative">
+    <Image
+      src="/screenshots/product-catalog.png"
+      alt="Product Catalog & Reports"
+      fill
+      style={{ objectFit: "cover" }}
+      sizes="(max-width: 768px) 100vw, 50vw"
+    />
+  </div>
+  <p className="mt-4 text-sm text-gray-600">Polished UI for purchasing, products, shipments, P&L, and sales analytics.</p>
+</CardContent>
+
             </Card>
           </motion.div>
         </div>
