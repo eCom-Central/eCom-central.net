@@ -26,7 +26,7 @@ import {
 
 // ===== Config =====
 const HERO_IMAGE: string = "/screenshots/analytics-hero.png"; // replace with a real screenshot path
-const LOGO_SRC: string = "/logo2.png"; // replace with your logo path
+const LOGO_SRC: string = "/logo3.png"; // replace with your logo path
 
 // ===== Google Sheets Web App endpoint (Apps Script) =====
 // Avoid `process.env` on the client (causes ReferenceError in the browser).
