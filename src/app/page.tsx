@@ -25,7 +25,7 @@ import {
  */
 
 // ===== Config =====
-const HERO_IMAGE: string = "/imageweb.png"; // replace with a real screenshot path
+const HERO_IMAGE: string = "/imageweb2.png"; // replace with a real screenshot path
 const LOGO_SRC: string = "/logo3.png"; // replace with your logo path
 
 // ===== Google Sheets Web App endpoint (Apps Script) =====
